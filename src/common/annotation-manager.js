@@ -58,6 +58,20 @@ class AnnotationManager {
 		this.render();
 	}
 
+	replaceAnnotations(annotations) {
+		this._annotations = [...annotations];
+		this._annotations.sort((a, b) => (a.sortIndex > b.sortIndex) - (a.sortIndex < b.sortIndex));
+		this._unsavedAnnotations.clear();
+		this._highVolatilityAnnotationIDs.clear();
+		this._lastChangeTime = 0;
+		this._lastSaveTime = 0;
+		this._undoStack = [];
+		this._redoStack = [];
+		this.render();
+		this._filter.hiddenIDs = [];
+		this._onChangeFilter(this._filter);
+	}
+
 	// Called when deletions come from the client side
 	unsetAnnotations(ids) {
 		this._annotations = this._annotations.filter(x => !ids.includes(x.id));

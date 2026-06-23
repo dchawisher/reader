@@ -1984,7 +1984,7 @@ abstract class DOMView<State extends DOMViewState, Data> {
 
 	destroy() {
 		this._overlayPopupDelayer.destroy();
-		this._annotationRenderRoot.unmount();
+		this._annotationRenderRoot?.unmount();
 	}
 
 	// ***

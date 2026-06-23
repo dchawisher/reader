@@ -2076,13 +2076,39 @@ class Reader {
 		}
 	}
 
-	reload(data) {
+	async reload(data, options = {}) {
 		this._data = data;
+		let state = {};
+		if ('primaryViewState' in options) {
+			state.primaryViewState = options.primaryViewState;
+		}
+		if ('secondaryViewState' in options) {
+			state.secondaryViewState = options.secondaryViewState;
+		}
+		if ('annotations' in options) {
+			this._annotationManager.replaceAnnotations(options.annotations);
+			state.selectedAnnotationIDs = [];
+			state.primaryViewAnnotationPopup = null;
+			state.secondaryViewAnnotationPopup = null;
+			state.primaryViewSelectionPopup = null;
+			state.secondaryViewSelectionPopup = null;
+			state.primaryViewOverlayPopup = null;
+			state.secondaryViewOverlayPopup = null;
+		}
+		if (Object.keys(state).length) {
+			this._updateState(state);
+		}
+		this._primaryView?.destroy();
+		this._secondaryView?.destroy();
 		this._primaryViewContainer.replaceChildren();
-		this._primaryView = this._createView(true);
+		this._primaryView = null;
+		this._primaryView = this._createView(true, options.location);
+		await this._primaryView.initializedPromise;
+		this._secondaryViewContainer.replaceChildren();
+		this._secondaryView = null;
 		if (this._state.splitType) {
-			this._secondaryViewContainer.replaceChildren();
 			this._secondaryView = this._createView(false);
+			await this._secondaryView.initializedPromise;
 		}
 	}
 
