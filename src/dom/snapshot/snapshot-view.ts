@@ -243,6 +243,11 @@ class SnapshotView extends DOMView<SnapshotViewState, SnapshotViewData> {
 		let blocks = this._getSnapshotCondensedBlocks();
 		let keptBlocks = new Set(annotatedBlocks);
 		this._addSnapshotIndentAncestorBlocks(annotatedBlocks, keptBlocks, blocks);
+		for (let block of blocks) {
+			if (block.closest?.('[data-juris-lit-never-collapse]')) {
+				keptBlocks.add(block);
+			}
+		}
 		let includedOpinions = new Set(
 			Array.from(annotatedBlocks)
 				.map(block => block.closest?.('.opinion'))
@@ -338,6 +343,7 @@ class SnapshotView extends DOMView<SnapshotViewState, SnapshotViewData> {
 	private _snapshotBlockIndent(block: Element) {
 		let win = block.ownerDocument?.defaultView;
 		let style = win?.getComputedStyle(block);
+		let semanticPadding = this._snapshotSemanticNestingIndent(block);
 		let listDepth = 0;
 		for (let parent = block.parentElement; parent; parent = parent.parentElement) {
 			if (parent.tagName === 'UL' || parent.tagName === 'OL') {
@@ -346,8 +352,22 @@ class SnapshotView extends DOMView<SnapshotViewState, SnapshotViewData> {
 		}
 		return listDepth * 24
 			+ this._snapshotCSSLength(style?.marginLeft)
-			+ this._snapshotCSSLength(style?.paddingLeft)
+			+ (semanticPadding || this._snapshotCSSLength(style?.paddingLeft))
 			+ Math.max(0, this._snapshotCSSLength(style?.textIndent));
+	}
+
+	private _snapshotSemanticNestingIndent(block: Element) {
+		let level = parseInt(block.getAttribute?.('data-juris-lit-nesting-level') || '', 10);
+		if (!Number.isFinite(level) || level <= 0) {
+			for (let className of block.classList || []) {
+				let match = /^nestingLevel-(\d+)$/.exec(className);
+				if (match) {
+					level = parseInt(match[1], 10);
+					break;
+				}
+			}
+		}
+		return Number.isFinite(level) && level > 0 ? level * 20 : 0;
 	}
 
 	private _snapshotCSSLength(value: string | undefined) {
@@ -880,6 +900,20 @@ class SnapshotView extends DOMView<SnapshotViewState, SnapshotViewData> {
 
 	override setAnnotations(annotations: WADMAnnotation[]) {
 		super.setAnnotations(annotations);
+		if (this._isSemanticSnapshotDocument()) {
+			this._refreshSemanticSnapshotAnnotationOverlay();
+		}
+	}
+
+	private _refreshSemanticSnapshotAnnotationOverlay() {
+		this._iframeWindow.requestAnimationFrame(() => {
+			this._iframeWindow.requestAnimationFrame(() => {
+				if (!this.initialized || !this._isSemanticSnapshotDocument()) {
+					return;
+				}
+				this._handleViewUpdate(true);
+			});
+		});
 	}
 
 	async print() {

@@ -20,3 +20,151 @@ body.force-static-theme {
 		color: var(--text-color);
 	}
 }
+
+body:is(.juris-lit-semantic-snapshot, .westlaw-snapshot) {
+	.document {
+		max-width: 74ch;
+		margin: 0 auto;
+	}
+
+	.documentHeader {
+		margin-block-end: 2rem;
+		padding-block-end: 1rem;
+		border-block-end: 1px solid rgba(127, 127, 127, 0.35);
+
+		h1 {
+			margin-block: 0 0.5rem;
+			font-size: 1.65em;
+			line-height: 1.18;
+		}
+
+		p {
+			margin-block: 0.2rem;
+		}
+
+		.citation {
+			font-weight: 600;
+		}
+
+		.source,
+		.metadata {
+			font-size: 0.9em;
+			color: color-mix(in srgb, currentColor 72%, transparent);
+		}
+	}
+
+	.subdocument {
+		margin-block: 1.5rem;
+		padding-inline-start: 1rem;
+		border-inline-start: 4px solid rgba(127, 127, 127, 0.55);
+
+		> h2 {
+			margin-block: 0 0.55rem;
+			font-size: 1.25em;
+			line-height: 1.25;
+		}
+	}
+
+	.subdocumentByline {
+		margin-block-start: -0.25rem;
+		font-size: 0.95em;
+		font-variant: small-caps;
+	}
+
+	.tone-red {
+		border-inline-start-color: #b3261e;
+		background: rgba(179, 38, 30, 0.055);
+	}
+
+	.tone-blue {
+		border-inline-start-color: #1d5f9f;
+		background: rgba(29, 95, 159, 0.055);
+	}
+
+	.tone-orange {
+		border-inline-start-color: #9a5b00;
+		background: rgba(154, 91, 0, 0.06);
+	}
+
+	.tone-green {
+		border-inline-start-color: #2d6f3f;
+		background: rgba(45, 111, 63, 0.055);
+	}
+
+	.tone-important {
+		padding: 0.85rem 1rem;
+		border: 1px solid rgba(127, 102, 0, 0.75);
+		border-inline-start-width: 4px;
+		border-radius: 4px;
+		background: rgba(255, 212, 0, 0.08);
+	}
+
+	.locatorIndicator {
+		font-size: 0.82em;
+		font-weight: 600;
+		color: color-mix(in srgb, currentColor 68%, transparent);
+	}
+
+	.prefixPageNumber {
+		margin-inline-end: 0.45em;
+	}
+
+	.footnote {
+		margin-block: 0.85rem 1rem;
+		padding-block-start: 0.5rem;
+		border-block-start: 1px solid rgba(127, 127, 127, 0.25);
+		font-size: 0.88em;
+	}
+
+	.footnoteNumber {
+		font-weight: 600;
+	}
+
+	.nestingLevel-1 {
+		padding-inline-start: 1.25rem;
+	}
+
+	.nestingLevel-2 {
+		padding-inline-start: 2.5rem;
+	}
+
+	.nestingLevel-3 {
+		padding-inline-start: 3.75rem;
+	}
+
+	.nestingLevel-4 {
+		padding-inline-start: 5rem;
+	}
+
+	.nestingLevel-5 {
+		padding-inline-start: 6.25rem;
+	}
+
+	.nestingLevel-6 {
+		padding-inline-start: 7.5rem;
+	}
+
+	.nestingLevel-7 {
+		padding-inline-start: 8.75rem;
+	}
+
+	.nestingLevel-8 {
+		padding-inline-start: 10rem;
+	}
+
+	.nestingLevel-9 {
+		padding-inline-start: 11.25rem;
+	}
+
+	.nestingLevel-10 {
+		padding-inline-start: 12.5rem;
+	}
+
+	.nestingLevel-11 {
+		padding-inline-start: 13.75rem;
+	}
+
+	.nestingLevel-12 {
+		padding-inline-start: 15rem;
+	}
+}
